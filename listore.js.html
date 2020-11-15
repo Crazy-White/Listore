@@ -24,7 +24,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Listore.html">Listore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#arrayify">arrayify</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#getItem">getItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#insert">insert</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#modify">modify</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#objectify">objectify</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#position">position</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#resetItem">resetItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#setItem">setItem</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#clone">clone</a></span></li>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Listore.html">Listore</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#.from">from</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#arrayify">arrayify</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#delete">delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#getItem">getItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#insert">insert</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#modify">modify</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#objectify">objectify</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#position">position</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#resetItem">resetItem</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Listore.html#setItem">setItem</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#clone">clone</a></span></li>
 </nav>
 
 <div id="main">
@@ -45,12 +45,16 @@ const $source = Symbol('Source: array');
 const $tpl = Symbol('Template: string');
 
 class Listore {
+    /**
+     * The source array, which is protected
+     * @type {array}
+     */
     [$source] = [];
     /**
      * Generate an instance of Listore by a template &lt;br/>
      * As the example shows below, the template contains many arrays(or string), each of which has three elements
      * like [keyName, typeCommand = '*', isUnique = false]. if it is a string, such as 'keyName', equal to ['keyName']. &lt;br/>
-     * You can get the template attribute to see the complied array template, such as `storage.template`, changes to this array is no use as it is just a clone. &lt;br/>
+     * You can get the template attribute to see the complied array template, such as `storage.template`, changes to this array is no allowed as it is freezed. &lt;br/>
      * String::keyName Corresponds to the key name of the object generated when the toObject function is called &lt;br/>
      * String::typeCommand Allowed type, using the Typeof command, so 'array' doesn't work, 'object' allows all instances of object. Allows multiple types to be separated by '|', case insensitive. And '*' indicates that any type is allowed &lt;br/>
      * Boolean::isUnique Whether repetition is allowed. This is useful when you need item to be unique &lt;br/>
@@ -142,7 +146,7 @@ class Listore {
                 throw new Error('This type of input is not allowed');
             }
         }
-        return clone(arr);
+        return clone(arr); // It's important that clone this array, so as to avoid external modifications
     }
 
     /**
@@ -256,6 +260,12 @@ class Listore {
      * @static
      */
     static clone = (...args) => clone(...args);
+
+    /**
+     * Automatic from function
+     * @return {undefind}
+     * @static
+     */
     static from(objs) {
         const s = new this(...Object.keys(objs[0]));
         s.from(objs);
@@ -276,7 +286,7 @@ export default Listore;
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Nov 14 2020 16:42:24 GMT+0000 (Coordinated Universal Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sun Nov 15 2020 06:55:09 GMT+0000 (Coordinated Universal Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
