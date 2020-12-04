@@ -56,14 +56,14 @@
 
     
 
-    <h4 class="name" id="Listore"><span class="type-signature"></span>new Listore<span class="signature">(&hellip;template)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Listore"><span class="type-signature"></span>new Listore<span class="signature">(template, config)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Generate an instance of Listore by a template <br/>As the example shows below, the template contains many arrays(or string), each of which has three elementslike [keyName, typeCommand = '*', isUnique = false]. if it is a string, such as 'keyName', equal to ['keyName']. <br/>You can get the template attribute to see the complied array template, such as `storage.template`, changes to this array is no allowed as it is freezed. <br/>String::keyName Corresponds to the key name of the object generated when the toObject function is called <br/>String::typeCommand Allowed type, using the Typeof command, so 'array' doesn't work, 'object' allows all instances of object. Allows multiple types to be separated by '|', case insensitive. And '*' indicates that any type is allowed <br/>Boolean::isUnique Whether repetition is allowed. This is useful when you need item to be unique <br/>
+    Generate an instance of Listore by a template<br/>As the example shows below, the template contains many objects(or string) and the config is an object<br/>So far we have four settings in the <i>template</i> : {key,isUique,check,fmt}<br/><strong>key</strong>: Corresponds to the key name of the object generated when the toObject function is called<br/><strong>isUique</strong>: Whether repetition is allowed. This is useful when you need item to be unique<br/><strong>check</strong>: An array of functions is included to check if the input is correct. The new data is checked by each function in the array (the function should return true or false). If the return value != true, the program reports an error<br/><strong>fmt</strong>: A function used to format the input is run before the check function, which actually checks the formatted data<br/>You can get the template attribute to see the complied array template, such as `storage.template`, changes to this array is no allowed as it is freezed<br/>As for config, we have four settings in the <i>config</i> : {onset, ondelete}<br/><strong>onset</strong>: callback -> instantiated(listore), setItem(the set item), calledFunctionName(string)<br/><strong>ondelete</strong>: Same as above<br/>
 </div>
 
 
@@ -99,7 +99,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line24">line 24</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -131,8 +131,6 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -158,21 +156,37 @@
             </td>
 
             
-                <td class="attributes">
-                
 
-                
+            
 
+            <td class="description last">
+                The template for item, which corresponds to the Listore's instance function
                 
-                    &lt;repeatable><br>
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type"><code>object</code></span>
+
+
+            
+            </td>
+
             
 
             
 
             <td class="description last">
-                The template for item, which corresponds to the Listore's instance function.
+                Configuration
                 
             </td>
         </tr>
@@ -199,7 +213,18 @@
 <div class="section-examples">
 <h5>Example</h5>
 
-    <pre class="prettyprint"><code>const storage = new Listore(['id', 'number', true], ['name', 'string'], ['info', 'string|number'], 'tips')</code></pre>
+    <pre class="prettyprint"><code>const storage = new Listore(
+    [
+        { key: 'name', isUique: false, fmt: e => e.trim(), check: [isString, e => e.length > 1] },
+        { key: 'id', isUique: false, check: [isNumber] },
+        'info',
+        'note',
+    ],
+    {
+        onset: (storage, item, fn) => console.log(`New item: ${JSON.stringify(item)} is set by function "${fn}"`),
+        ondelete: (storage, item, fn) => null, // anything you want to do
+    },
+);</code></pre>
 
 </div>
 
@@ -265,7 +290,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line11">line 11</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -339,7 +364,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line221">line 221</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line235">line 235</a>
     </li></ul></dd>
     
 
@@ -403,7 +428,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line205">line 205</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line219">line 219</a>
     </li></ul></dd>
     
 
@@ -467,7 +492,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line183">line 183</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -531,7 +556,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line190">line 190</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line204">line 204</a>
     </li></ul></dd>
     
 
@@ -595,7 +620,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line196">line 196</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line210">line 210</a>
     </li></ul></dd>
     
 
@@ -669,7 +694,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line212">line 212</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line226">line 226</a>
     </li></ul></dd>
     
 
@@ -743,7 +768,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line228">line 228</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line242">line 242</a>
     </li></ul></dd>
     
 
@@ -847,7 +872,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line52">line 52</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -1007,7 +1032,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line173">line 173</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line185">line 185</a>
     </li></ul></dd>
     
 
@@ -1167,7 +1192,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line134">line 134</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line123">line 123</a>
     </li></ul></dd>
     
 
@@ -1402,7 +1427,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line162">line 162</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line172">line 172</a>
     </li></ul></dd>
     
 
@@ -1591,7 +1616,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line84">line 84</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -1754,7 +1779,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line41">line 41</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -1914,7 +1939,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line67">line 67</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -2145,7 +2170,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line119">line 119</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -2338,7 +2363,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line147">line 147</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line136">line 136</a>
     </li></ul></dd>
     
 
@@ -2477,7 +2502,7 @@
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Thu Nov 19 2020 15:34:50 GMT+0000 (Coordinated Universal Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Fri Dec 04 2020 13:24:42 GMT+0000 (Coordinated Universal Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
