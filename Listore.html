@@ -63,7 +63,7 @@
 
 
 <div class="description">
-    Generate an instance of Listore by a template<br/>As the example shows below, the template contains many objects(or string) and the config is an object<br/><br/>So far we have some settings in the <i>template</i> : {key, isUique, check, fmt}<br/><strong>key</strong>: Corresponds to the key name of the object generated when the toObject function is called<br/><strong>isUique</strong>: Whether repetition is allowed. This is useful when you need item to be unique<br/><strong>check</strong>: An array of functions is included to check if the input is correct. The new data is checked by each function in the array (the function should return true or false). If the return value != true, the program reports an error<br/><strong>fmt</strong>: A function used to format the input is run before the check function, which actually checks the formatted data<br/>You can get the template attribute to see the complied array template, such as `storage.template`, changes to this array is no allowed as it is freezed<br/><br/><strong>onchange</strong>: callback -> instantiated(listore), setItem(the set item or deleted), calledFunctionName(string)<br/>
+    Generate an instance of Listore by a template<br/>As the example shows below, the template contains many objects(or string) and the config is an object<br/><br/>So far we have some settings in the <i>template</i> : {key, isUique, check, fmt, default}<br/><strong>key</strong>: Corresponds to the key name of the object generated when the toObject function is called<br/><strong>isUique</strong>: Whether repetition is allowed. This is useful when you need item to be unique<br/><strong>check</strong>: An array of functions is included to check if the input is correct. The new data is checked by each function in the array (the function should return true or false). If the return value != true, the program reports an error<br/><strong>fmt</strong>: A function used to format the input is run before the check function, which actually checks the formatted data<br/><strong>default</strong>: Default value, if set, when fail to check, it will be used<br/>You can get the template attribute to see the complied array template, such as `storage.template`, changes to this array is no allowed as it is freezed<br/><br/><strong>onchange</strong>: callback -> instantiated(listore), setItem(the set item or deleted), calledFunctionName(string)<br/>
 </div>
 
 
@@ -99,7 +99,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line37">line 37</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -215,15 +215,14 @@
 
     <pre class="prettyprint"><code>const isString = e => typeof e === 'string';
 const isNumber = e => typeof e === 'number';
-const storage = new Listore(
-    [
-        { key: 'name', isUique: false, fmt: e => e.trim(), check: [isString, e => e.length > 1] },
-        { key: 'id', isUique: false, check: [isNumber] },
-        'info',
-        'note',
-    ],
-    (storage, item, fn) => console.log(`New item: ${JSON.stringify(item)} is set by function "${fn}"`)
-);</code></pre>
+const tpl = [
+    { key: 'name', isUique: false, fmt: e => e.trim(), check: [isString, e => e.length > 1] },
+    { key: 'id', isUique: false, check: [isNumber], default: -1 },
+    'info',
+    'note',
+];
+const onoperate = (storage, item, fn) => console.log(`New item: ${JSON.stringify(item)} is set by function "${fn}"`);
+const storage = new Listore(tpl, onoperate);</code></pre>
 
 </div>
 
@@ -363,7 +362,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line235">line 235</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line251">line 251</a>
     </li></ul></dd>
     
 
@@ -427,7 +426,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line219">line 219</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line235">line 235</a>
     </li></ul></dd>
     
 
@@ -491,7 +490,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line197">line 197</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line213">line 213</a>
     </li></ul></dd>
     
 
@@ -555,7 +554,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line204">line 204</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line220">line 220</a>
     </li></ul></dd>
     
 
@@ -619,7 +618,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line210">line 210</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line226">line 226</a>
     </li></ul></dd>
     
 
@@ -693,7 +692,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line226">line 226</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line242">line 242</a>
     </li></ul></dd>
     
 
@@ -767,7 +766,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line242">line 242</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line258">line 258</a>
     </li></ul></dd>
     
 
@@ -871,7 +870,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line87">line 87</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -1031,7 +1030,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line181">line 181</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line199">line 199</a>
     </li></ul></dd>
     
 
@@ -1191,7 +1190,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line119">line 119</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -1426,7 +1425,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line168">line 168</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -1615,7 +1614,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line51">line 51</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
@@ -1778,7 +1777,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line76">line 76</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line94">line 94</a>
     </li></ul></dd>
     
 
@@ -1938,7 +1937,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line150">line 150</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -2169,7 +2168,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line103">line 103</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line121">line 121</a>
     </li></ul></dd>
     
 
@@ -2362,7 +2361,7 @@ const storage = new Listore(
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line132">line 132</a>
+        <a href="listore.js.html">listore.js</a>, <a href="listore.js.html#line150">line 150</a>
     </li></ul></dd>
     
 
@@ -2501,7 +2500,7 @@ const storage = new Listore(
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Sat Dec 19 2020 15:35:54 GMT+0000 (Coordinated Universal Time) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a> on Fri Jan 01 2021 12:31:26 GMT+0000 (Coordinated Universal Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
